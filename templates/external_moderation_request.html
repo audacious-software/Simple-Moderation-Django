@@ -1,0 +1,163 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+        <meta name="theme-color" content="#000000">
+
+        <link rel="stylesheet" href="{% static 'builder-js/vendor/material-components-web-11.0.0.css' %}" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/builder-js/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/builder-js/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/builder-js/icons/favicon-16x16.png">
+        <link rel="manifest" href="/static/builder-js/icons/site.webmanifest">
+        
+        <title>External Moderation Request</title>
+        <style>
+            body {
+                display: flex;
+                height: 100vh;
+                margin: 0px;
+            }
+
+            .main-content {
+                margin-top: 64px;
+                width: 100%;
+            }
+
+            .app-bar {
+                position: absolute;
+                z-index: 10;
+            }
+
+            .mdc-top-app-bar {
+                z-index: 7;
+            }
+            
+            .mdc-layout-grid__cell {
+            	margin-bottom: 16px;
+            }
+            
+            a {
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body class="mdc-typography">
+        <header class="mdc-top-app-bar app-bar mdc-top-app-bar--fixed" id="app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                    <a href="javascript:window.history.back();" class="demo-menu material-icons mdc-top-app-bar__navigation-icon">arrow_back</a>
+                    <span id="dialog-name" class="mdc-top-app-bar__title">External Moderation Request</span>
+                </section>
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                </section>
+            </div>
+        </header>
+
+		<main class="main-content" id="main-content">
+			{% if moderation_request.approved is None and moderation_request.denied is None and moderation_request.timed_out is None %}
+				<div class="mdc-layout-grid">
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-phone mdc-layout-grid__cell--span-4-desktop">
+							<div class="mdc-typography--caption">Requested:</div>
+							<div><strong>{{ moderation_request.requested }}</strong></div>
+						</div>
+					</div>
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-phone">
+							<div class="mdc-typography--caption">Context:</div>
+							<div><strong>{{ moderation_request.message }}</strong></div>
+						</div>
+					</div>
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-phone mdc-layout-grid__cell--span-4-desktop">
+							<label class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea" id="response-field">
+								<span class="mdc-notched-outline">
+									<span class="mdc-notched-outline__leading"></span>
+									<span class="mdc-notched-outline__notch">
+										<span class="mdc-floating-label" id="my-label-id">Response</span>
+									</span>						
+									<span class="mdc-notched-outline__trailing"></span>
+								</span>
+								<span class="mdc-text-field__resizer">
+									<textarea class="mdc-text-field__input" rows="8"aria-label="Response"></textarea>
+								</span>
+							</label>
+						</div>
+					</div>
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+							<button class="mdc-button mdc-button--raised mdc-button--icon-leading action-button" id="action-approve">
+								<span class="mdc-button__ripple"></span>
+								<span class="mdc-button__focus-ring"></span>
+								<i class="material-icons mdc-button__icon" aria-hidden="true">thumb_up</i>
+								<span class="mdc-button__label">Approve</span>
+							</button>
+	
+							<button class="mdc-button mdc-button--raised mdc-button--icon-trailing action-button" id="action-deny">
+								<span class="mdc-button__ripple"></span>
+								<span class="mdc-button__focus-ring"></span>
+								<span class="mdc-button__label">Deny</span>
+								<i class="material-icons mdc-button__icon" aria-hidden="true">thumb_down</i>
+							</button>
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<div class="mdc-layout-grid">
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-phone mdc-layout-grid__cell--span-4-desktop">
+							<div class="mdc-typography--caption">Requested:</div>
+							<div><strong>{{ moderation_request.requested }}</strong></div>
+						</div>
+					</div>
+					{% if moderation_request.approved %}
+						<div class="mdc-layout-grid__inner">
+							<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-phone mdc-layout-grid__cell--span-4-desktop">
+								<div class="mdc-typography--caption">Approved:</div>
+								<div><strong>{{ moderation_request.approved }}</strong> by <strong>{{ moderation_request.moderator.get_full_name }}</strong></div>
+							</div>
+						</div>
+					{% endif %}
+					{% if moderation_request.denied %}
+						<div class="mdc-layout-grid__inner">
+							<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-phone mdc-layout-grid__cell--span-4-desktop">
+								<div class="mdc-typography--caption">Denied:</div>
+								<div><strong>{{ moderation_request.denied }}</strong> by <strong>{{ moderation_request.moderator.get_full_name }}</strong></div>
+							</div>
+						</div>
+					{% endif %}
+
+					{% if moderation_request.timed_out %}
+						<div class="mdc-layout-grid__inner">
+							<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-phone mdc-layout-grid__cell--span-4-desktop">
+								<div class="mdc-typography--caption">Timed Out:</div>
+								<div><strong>{{ moderation_request.timed_out }}</strong></div>
+							</div>
+						</div>
+					{% endif %}
+
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-phone">
+							<div class="mdc-typography--caption">Context:</div>
+							<div><strong>{{ moderation_request.message }}</strong></div>
+						</div>
+					</div>
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-phone">
+							<div class="mdc-typography--caption">Response:</div>
+							<div><strong>{{ moderation_request.response }}</strong></div>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+		</main>
+
+        {% csrf_token %}
+    </body>
+    
+    <script data-main="{% static 'external-moderation/js/app/moderate.js' %}" src="{% static 'builder-js/vendor/require.js' %}"></script>
+</html>

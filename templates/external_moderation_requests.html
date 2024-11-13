@@ -1,0 +1,167 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% block 'page_title' %}Moderation Requests | Django Dialog Engine{% endblock %}
+{% block 'navigation_title' %}Moderation Requests{% endblock %}
+{% block 'navigation_content' %}{% endblock %}
+{% block 'main_content' %}
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__inner mdc-card" style="padding: 16px; margin-bottom: 16px;">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+            	<div style="margin-bottom: 12px; padding-top: 18px;">
+					<strong><span class="mdc-typography--body-2">Moderation State:</span></strong>
+					{% for moderation_state in states %}
+						{% if moderation_state.0 == state %}
+							<div class="mdc-typography--body-2" style="display: inline-block; margin-left: 16px;"><strong><a href="{% url 'external_moderation_requests' %}?state={{ moderation_state.0 }}&query={{ search_query|urlencode }}">{{ moderation_state.1 }}</a></strong></div>
+						{% else %}
+							<div class="mdc-typography--body-2" style="display: inline-block; margin-left: 16px;"><a href="{% url 'external_moderation_requests' %}?state={{ moderation_state.0 }}&query={{ search_query|urlencode }}">{{ moderation_state.1 }}</a></div>
+						{% endif %}
+					{% endfor %}
+					{% if state == '' %}
+						<div class="mdc-typography--body-2" style="display: inline-block; margin-left: 16px;"><strong><a href="{% url 'external_moderation_requests' %}?query={{ search_query|urlencode }}">All</a></strong></div>
+					{% else %}
+						<div class="mdc-typography--body-2" style="display: inline-block; margin-left: 16px;"><a href="{% url 'external_moderation_requests' %}?query={{ search_query|urlencode }}">All</a></div>
+					{% endif %}
+				</div>
+			</div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4" style="text-align: right;">
+				<label class="mdc-text-field mdc-text-field--outlined" style="width: 100%;" id="search_field">
+					<span class="mdc-notched-outline">
+						<span class="mdc-notched-outline__leading"></span>
+						<span class="mdc-notched-outline__notch">
+							<span class="mdc-floating-label" id="search-label-id">Search</span>
+						</span>
+						<span class="mdc-notched-outline__trailing"></span>
+					</span>
+					<input type="search" class="mdc-text-field__input" aria-labelledby="search-label-id" value="{{ search_query }}">
+				</label>
+			</div>
+        </div>
+        <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                <div class="mdc-data-table" id="participants_data_table" style="width: 100%;">
+                    <div class="mdc-data-table__table-container">
+                        <table class="mdc-data-table__table" aria-label="Participants">
+                            <thead>
+                                <tr class="mdc-data-table__header-row">
+                                    <th class="mdc-data-table__header-cell mdc-data-table__header-cell--with-sort" role="columnheader" scope="col">User</th>
+                                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Dialog</th>
+                                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Moderation State</th>
+                                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Moderator</th>
+                                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col" style="text-align: center;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="mdc-data-table__content">
+                                {% for request in requests %}
+                                    <tr class="mdc-data-table__row" data-row-id="participant_row_{{ participant.identifier }}">
+                                        <td class="mdc-data-table__cell" scope="row"><a href="{% url 'simple_messaging_ui' %}?identifier={{ participant.identifier }}">{{ request.user.identifier }}</a></td>
+                                        <td class="mdc-data-table__cell">{{ request.dialog_name }}</td>
+                                        <td class="mdc-data-table__cell">{{ request.moderation_state }}</td>
+                                        <td class="mdc-data-table__cell">{{ request.moderator }}</td>
+										<td class="mdc-data-table__cell">
+											<a href="{{ request.get_absolute_url }}">Review</a>
+										</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+					<div class="mdc-data-table__pagination">
+						<div class="mdc-data-table__pagination-trailing">
+							<div class="mdc-data-table__pagination-rows-per-page">
+								<div class="mdc-data-table__pagination-rows-per-page-label">
+									Moderation requests per page
+								</div>
+								<div class="mdc-select mdc-select--outlined mdc-select--no-label mdc-data-table__pagination-rows-per-page-select mdc-data-table__pagination-rows-per-page-select--outlined">
+									<div class="mdc-select__anchor" role="button" aria-haspopup="listbox" aria-labelledby="demo-pagination-select" tabindex="0">
+										<span class="mdc-select__selected-text-container">
+											<span id="demo-pagination-select" class="mdc-select__selected-text">
+												{% if size == -1 %}
+													All
+												{% else %}
+													{{ size }}
+												{% endif %}
+											</span>
+										</span>
+										<span class="mdc-select__dropdown-icon">
+											<svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+												<polygon class="mdc-select__dropdown-icon-inactive" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon>
+												<polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15"></polygon>
+											</svg>
+										</span>
+										<span class="mdc-notched-outline mdc-notched-outline--notched">
+											<span class="mdc-notched-outline__leading"></span>
+											<span class="mdc-notched-outline__trailing"></span>
+										</span>
+									</div>
+
+									<div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth" role="listbox">
+										<ul class="mdc-list">
+											<li class="mdc-select__option mdc-select__one-line-option mdc-list-item {% if size == 25 %}mdc-list-item--selected{% endif %} mdc-list-item--with-one-line" {% if size == 25 %}aria-selected="true"{% endif %} role="option" data-value="25">
+												<span class="mdc-list-item__ripple"></span>
+												<span class="mdc-list-item__content">
+													<span class="mdc-list-item__primary-text">25</span>
+												</span>
+											</li>
+											<li class="mdc-select__option mdc-select__one-line-option mdc-list-item {% if size == 50 %}mdc-list-item--selected{% endif %} mdc-list-item--with-one-line" {% if size == 50 %}aria-selected="true"{% endif %} role="option" data-value="50">
+												<span class="mdc-list-item__ripple"></span>
+												<span class="mdc-list-item__content">
+													<span class="mdc-list-item__primary-text">50</span>
+												</span>
+											</li>
+											<li class="mdc-select__option mdc-select__one-line-option mdc-list-item {% if size == 100 %}mdc-list-item--selected{% endif %} mdc-list-item--with-one-line" {% if size == 100 %}aria-selected="true"{% endif %} role="option" data-value="100">
+												<span class="mdc-list-item__ripple"></span>
+												<span class="mdc-list-item__content">
+													<span class="mdc-list-item__primary-text">100</span>
+												</span>
+											</li>
+											<li class="mdc-select__option mdc-select__one-line-option mdc-list-item {% if size == -1 %}mdc-list-item--selected{% endif %} mdc-list-item--with-one-line" {% if size == -1 %}aria-selected="true"{% endif %} role="option" data-value="-1">
+												<span class="mdc-list-item__ripple"></span>
+												<span class="mdc-list-item__content">
+													<span class="mdc-list-item__primary-text">All</span>
+												</span>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<div class="mdc-data-table__pagination-navigation">
+								<div class="mdc-data-table__pagination-total">
+									{{ start_item }} ‑ {{ end_item }} of {{ total }}
+								</div>
+								<a href="{{ first_page }}" class="mdc-icon-button material-icons mdc-data-table__pagination-button" data-first-page="true">
+									<div class="mdc-button__icon">first_page</div>
+								</a>
+								{% if previous_page %}
+									<a href="{{ previous_page }}" class="mdc-icon-button material-icons mdc-data-table__pagination-button" data-prev-page="true">
+										<div class="mdc-button__icon">chevron_left</div>
+									</a>
+								{% else %}
+									<button class="mdc-icon-button material-icons mdc-data-table__pagination-button" data-prev-page="true" disabled>
+										<div class="mdc-button__icon">chevron_left</div>
+									</button>
+								{% endif %}
+								{% if next_page %}
+									<a href="{{ next_page }}" class="mdc-icon-button material-icons mdc-data-table__pagination-button" data-next-page="true">
+										<div class="mdc-button__icon">chevron_right</div>
+									</a>
+								{% else %}
+									<button class="mdc-icon-button material-icons mdc-data-table__pagination-button" data-next-page="true" disabled>
+										<div class="mdc-button__icon">chevron_right</div>
+									</button>
+								{% endif %}
+								<a href="{{ last_page }}" class="mdc-icon-button material-icons mdc-data-table__pagination-button">
+									<div class="mdc-button__icon">last_page</div>
+								</a>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block 'js_init' %}
+    <script data-main="{% static 'external-moderation/js/app/requests.js' %}" src="{% static 'external-moderation/js/vendor/require.js' %}"></script>
+{% endblock %}
