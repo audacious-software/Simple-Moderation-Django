@@ -10,16 +10,16 @@ from django.utils import timezone
 class ExternalModerationRequestManager(models.Manager):
     def create_moderation_request(self, requester_id, message):
         if requester_id is None:
-            raise Exception('Please provide a valid "requester_id" value.')
+            raise ValueError('Please provide a valid "requester_id" value.')
 
         if message is None:
-            raise Exception('Please provide a valid "message" value.')
+            raise ValueError('Please provide a valid "message" value.')
 
         return self.create(requested=timezone.now(), message=message, requester_id=requester_id)
 
     def fetch_latest_pending_request(self, requester_id):
         if requester_id is None:
-            raise Exception('Please provide a valid "requester_id" value.')
+            raise ValueError('Please provide a valid "requester_id" value.')
 
         return self.filter(requester_id=requester_id, used=None).order_by('-requested').first()
 

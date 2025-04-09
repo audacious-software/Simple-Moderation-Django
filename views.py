@@ -2,18 +2,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from builtins import str # pylint: disable=redefined-builtin
 import json
-import os
 
-from django.conf import settings
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, FileResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.html import mark_safe
 from django.views.decorators.cache import never_cache
 
 

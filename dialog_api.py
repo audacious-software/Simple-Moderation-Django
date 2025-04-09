@@ -1,12 +1,7 @@
-import importlib
+# pylint: disable=line-too-long
+
 import json
-import traceback
 
-import numpy
-
-from deepdiff import DeepDiff
-
-from django.conf import settings
 from django.utils import timezone
 
 from django_dialog_engine.dialog import BaseNode, DialogTransition
@@ -26,7 +21,7 @@ class ExternalModerationBranch(BaseNode):
 
         return None
 
-    def __init__(self, node_id, approve_action, deny_action, timeout_action, timeout_interval, message, response_variable):
+    def __init__(self, node_id, approve_action, deny_action, timeout_action, timeout_interval, message, response_variable): # pylint: disable=too-many-arguments
         super(ExternalModerationBranch, self).__init__(node_id, node_id) # pylint: disable=super-with-arguments
 
         self.approve_action = approve_action
