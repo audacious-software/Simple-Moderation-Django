@@ -46,7 +46,7 @@ jobs:
             cd ..
             mv project simple_moderation
             git clone https://github.com/audacious-software/Quicksilver-Django.git quicksilver
-            pip install -r simple_moderation/requirements.txt -r quicksilver/requirements.txt -r simple_data_export/requirements.txt -r simple_dashboard/requirements.txt
+            pip install -r simple_moderation/requirements.txt -r quicksilver/requirements.txt
             echo "Starting Django project..."
             django-admin startproject sm
             echo "Copying over packages..."
@@ -107,7 +107,7 @@ jobs:
             cd ..
             mv project simple_moderation
             git clone https://github.com/audacious-software/Quicksilver-Django.git quicksilver
-            pip install -r simple_moderation/requirements.txt -r quicksilver/requirements.txt -r simple_data_export/requirements.txt -r simple_dashboard/requirements.txt
+            pip install -r simple_moderation/requirements.txt -r quicksilver/requirements.txt
             echo "Starting Django project..."
             django-admin startproject sm
             echo "Copying over packages..."
@@ -167,7 +167,7 @@ jobs:
             cd ..
             mv project simple_moderation
             git clone https://github.com/audacious-software/Quicksilver-Django.git quicksilver
-            pip install -r simple_moderation/requirements.txt -r quicksilver/requirements.txt -r simple_data_export/requirements.txt -r simple_dashboard/requirements.txt
+            pip install -r simple_moderation/requirements.txt -r quicksilver/requirements.txt
             echo "Starting Django project..."
             django-admin startproject sm
             echo "Copying over packages..."
@@ -227,7 +227,7 @@ jobs:
             cd ..
             mv project simple_moderation
             git clone https://github.com/audacious-software/Quicksilver-Django.git quicksilver
-            pip install -r simple_moderation/requirements.txt -r quicksilver/requirements.txt -r simple_data_export/requirements.txt -r simple_dashboard/requirements.txt
+            pip install -r simple_moderation/requirements.txt -r quicksilver/requirements.txt
             echo "Starting Django project..."
             django-admin startproject sm
             echo "Copying over packages..."
