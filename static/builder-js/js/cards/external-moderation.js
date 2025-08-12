@@ -181,23 +181,23 @@ define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
 
       const approveNode = this.dialog.resolveNode(this.definition.approve_action)
 
-	    if (approveNode !== null) {
-	      summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If approved, go to: ${approveNode.cardName()}.</div>`
-	    }
+      if (approveNode !== null) {
+        summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If approved, go to: ${approveNode.cardName()}.</div>`
+      }
 
       const denyNode = this.dialog.resolveNode(this.definition.deny_action)
 
-	    if (denyNode !== null) {
-	      summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If denied, go to: ${denyNode.cardName()}.</div>`
-	    }
+      if (denyNode !== null) {
+        summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If denied, go to: ${denyNode.cardName()}.</div>`
+      }
 
-	    if (this.definition.timeout_action !== undefined) {
-		    const timeoutNode = this.dialog.resolveNode(this.definition.timeout_action)
+      if (this.definition.timeout_action !== undefined) {
+        const timeoutNode = this.dialog.resolveNode(this.definition.timeout_action)
 
         if (timeoutNode !== null) {
-  		    summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If timed out: ${timeoutNode.cardName()}.</div>`
+          summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If timed out: ${timeoutNode.cardName()}.</div>`
         }
-  	  }
+      }
 
       return summary
     }
@@ -212,8 +212,8 @@ define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
       const messageField = mdc.textField.MDCTextField.attachTo(document.getElementById(this.cardId + '_message'))
 
       if (this.definition.message !== undefined) {
-	      messageField.value = this.definition.message
-	  }
+        messageField.value = this.definition.message
+      }
 
       $('#' + this.cardId + '_message_value').on('change keyup paste', function () {
         const value = $('#' + me.cardId + '_message_value').val()
@@ -226,8 +226,8 @@ define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
       const responseVariableField = mdc.textField.MDCTextField.attachTo(document.getElementById(this.cardId + '_response'))
 
       if (this.definition.response_variable !== undefined) {
-	      responseVariableField.value = this.definition.response_variable
-	  }
+        responseVariableField.value = this.definition.response_variable
+      }
 
       $('#' + this.cardId + '_response_value').on('change keyup paste', function () {
         const value = $('#' + me.cardId + '_response_value').val()
@@ -383,28 +383,28 @@ define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
       const nodes = super.destinationNodes(dialog)
 
       const destinations = [
-      	this.definition.approve_action,
-      	this.definition.deny_action,
-      	this.definition.timeout_action
+        this.definition.approve_action,
+        this.definition.deny_action,
+        this.definition.timeout_action
       ]
 
-      let includedIds = []
+      const includedIds = []
 
-		  for (let j = 0; j < destinations.length; j++) {
-		    const id = destinations[j]
+      for (let j = 0; j < destinations.length; j++) {
+        const id = destinations[j]
 
-		    if (id !== undefined && id !== null) {
-			    for (let i = 0; i < dialog.definition.length; i++) {
-			      const item = dialog.definition[i]
+        if (id !== undefined && id !== null) {
+          for (let i = 0; i < dialog.definition.length; i++) {
+            const item = dialog.definition[i]
 
-			      if (item.id === id) {
-				      nodes.push(Node.createCard(item, dialog))
-			      }
-			    }
+            if (item.id === id) {
+              nodes.push(Node.createCard(item, dialog))
+            }
+          }
 
-			    includedIds.push(id)
-		    }
-		  }
+          includedIds.push(id)
+        }
+      }
 
       return nodes
     }
@@ -431,7 +431,7 @@ define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
       const card = {
         type: 'external-moderation',
         name: cardName,
-        id: id,
+        id,
         approve_action: null,
         deny_action: null,
         timeout_action: null,
