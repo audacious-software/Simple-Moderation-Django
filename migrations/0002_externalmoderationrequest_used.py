@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('django_dialog_engine_moderation', '0001_initial'),
+        ('simple_moderation', '0001_initial'),
     ]
 
     operations = [

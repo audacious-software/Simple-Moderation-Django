@@ -2,11 +2,13 @@
 
 import json
 
+from django.template import Template, Context
+from django.template.loader import render_to_string
 from django.utils import timezone
 
 from django_dialog_engine.dialog import BaseNode, DialogTransition
 
-from django_dialog_engine_moderation.models import ExternalModerationRequest
+from simple_moderation.models import ExternalModerationRequest
 
 class ExternalModerationBranch(BaseNode):
     @staticmethod
@@ -54,14 +56,23 @@ class ExternalModerationBranch(BaseNode):
         return json.dumps(definition, indent=2)
 
     def evaluate(self, dialog, response=None, last_transition=None, extras=None, logger=None): # pylint: disable=too-many-arguments, too-many-locals, too-many-branches, too-many-statements
-        requester_id = '%s:%s' % (last_transition.dialog.pk, self.node_id)
+        requester_id = '%s:%s:%s' % (last_transition.dialog.key, self.node_id, last_transition.dialog.pk)
 
         pending = ExternalModerationRequest.objects.fetch_latest_pending_request(requester_id)
 
         if pending is None:
-            ExternalModerationRequest.objects.create_moderation_request(requester_id, self.message)
+            template = Template(self.message)
+            context = Context(extras)
 
-            return None
+            rendered_message = template.render(context)
+
+            pending = ExternalModerationRequest.objects.create_moderation_request(requester_id, rendered_message)
+            pending.moderate()
+
+            if pending.resolve() is False:
+                return None
+        else:
+            pending.resolve()
 
         if pending.approved is not None:
             transition = DialogTransition(new_state_id=self.approve_action)
@@ -119,13 +130,16 @@ class ExternalModerationBranch(BaseNode):
         return []
 
     def next_nodes(self):
-        nodes = [
-            self.approve_action,
-            self.deny_action,
-        ]
+        nodes = []
+
+        if self.approve_action is not None:
+            nodes.append((self.approve_action, 'Approve'))
+
+        if self.deny_action is not None:
+            nodes.append((self.deny_action, 'Deny'))
 
         if self.timeout_action is not None:
-            nodes.append(self.timeout_action)
+            nodes.append((self.timeout_action, 'Timeout'))
 
         return nodes
 

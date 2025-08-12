@@ -11,8 +11,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
 
-
-from .models import ExternalModerationRequest
+from .models import ExternalModerationRequest, ModerationDecision
 
 @never_cache
 @login_required
@@ -36,22 +35,18 @@ def external_moderation_request(request, request_id): # pylint: disable=unused-a
 
             return HttpResponse(json.dumps(payload, indent=2), content_type='application/json', status=500)
 
-        moderation_request.response = response
-        moderation_request.moderator = request.user
+        decision = ModerationDecision(request=moderation_request, when=timezone.now())
 
-        if action == 'approve':
-            moderation_request.approved = timezone.now()
-        elif action == 'deny':
-            moderation_request.denied = timezone.now()
-        else:
-            payload = {
-                'success': False,
-                'error': 'Unknown "action": %s' % action
-            }
+        decision.approved = (action == 'approve')
+        decision.decision_maker = 'user:%s' % request.user.username
 
-            return HttpResponse(json.dumps(payload, indent=2), content_type='application/json', status=500)
+        metadata = {
+            'response': response
+        }
 
-        moderation_request.save()
+        decision.metadata = json.dumps(metadata, indent=2)
+
+        decision.save()
 
         payload = {
             'success': True

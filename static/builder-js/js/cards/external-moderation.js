@@ -176,27 +176,29 @@ define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
 
     viewBody () {
       let summary = '<div class="mdc-typography--body1" style="margin-top: 16px; margin-left: 16px; margin-right: 16px; margin-bottom: 8px;">Continue after moderating...</div>'
-      
+
       summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;"><em>${this.definition.message}</em></div>`
-      
+
       const approveNode = this.dialog.resolveNode(this.definition.approve_action)
 
-	  if (approveNode !== null) {
+	    if (approveNode !== null) {
 	      summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If approved, go to: ${approveNode.cardName()}.</div>`
-	  }
+	    }
 
       const denyNode = this.dialog.resolveNode(this.definition.deny_action)
 
-	  if (denyNode !== null) {
+	    if (denyNode !== null) {
 	      summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If denied, go to: ${denyNode.cardName()}.</div>`
-	  }
+	    }
 
-	  if (this.definition.timeout_action !== undefined) {
-		  const timeoutNode = this.dialog.resolveNode(this.definition.timeout_action)
-	
-		  summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If timed out: ${timeoutNode.cardName()}.</div>`
-	  }
-	  
+	    if (this.definition.timeout_action !== undefined) {
+		    const timeoutNode = this.dialog.resolveNode(this.definition.timeout_action)
+
+        if (timeoutNode !== null) {
+  		    summary += `<div class="mdc-typography--body1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 16px;">If timed out: ${timeoutNode.cardName()}.</div>`
+        }
+  	  }
+
       return summary
     }
 
@@ -208,7 +210,7 @@ define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
       const nextDialog = mdc.dialog.MDCDialog.attachTo(document.getElementById(me.cardId + '-edit-dialog'))
 
       const messageField = mdc.textField.MDCTextField.attachTo(document.getElementById(this.cardId + '_message'))
-     
+
       if (this.definition.message !== undefined) {
 	      messageField.value = this.definition.message
 	  }
@@ -222,7 +224,7 @@ define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
       })
 
       const responseVariableField = mdc.textField.MDCTextField.attachTo(document.getElementById(this.cardId + '_response'))
-     
+
       if (this.definition.response_variable !== undefined) {
 	      responseVariableField.value = this.definition.response_variable
 	  }
@@ -379,30 +381,30 @@ define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
 
     destinationNodes (dialog) {
       const nodes = super.destinationNodes(dialog)
-      
+
       const destinations = [
       	this.definition.approve_action,
       	this.definition.deny_action,
       	this.definition.timeout_action
       ]
-      
+
       let includedIds = []
 
-		for (let j = 0; j < destinations.length; j++) {
-		  const id = destinations[j]
-		  
-		  if (id !== undefined && id !== null) {
-			for (let i = 0; i < dialog.definition.length; i++) {
-			  const item = dialog.definition[i]
-		
-			  if (item.id === id) {
-				nodes.push(Node.createCard(item, dialog))
-			  }
-			}
-		
-			includedIds.push(id)
+		  for (let j = 0; j < destinations.length; j++) {
+		    const id = destinations[j]
+
+		    if (id !== undefined && id !== null) {
+			    for (let i = 0; i < dialog.definition.length; i++) {
+			      const item = dialog.definition[i]
+
+			      if (item.id === id) {
+				      nodes.push(Node.createCard(item, dialog))
+			      }
+			    }
+
+			    includedIds.push(id)
+		    }
 		  }
-		}
 
       return nodes
     }

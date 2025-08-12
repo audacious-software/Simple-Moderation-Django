@@ -1,0 +1,5 @@
+You have a new moderation request for {{ site_name }}:
+
+    {{ site_url }}{{ request.get_absolute_url}}
+
+Please review this at your earliest convenience.
