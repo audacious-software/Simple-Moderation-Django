@@ -3,7 +3,6 @@
 import json
 
 from django.template import Template, Context
-from django.template.loader import render_to_string
 from django.utils import timezone
 
 from django_dialog_engine.dialog import BaseNode, DialogTransition

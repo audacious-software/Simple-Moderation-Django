@@ -62,7 +62,7 @@ class ExternalModerationRequest(models.Model):
             except AttributeError:
                 pass
 
-    def resolve(self):
+    def resolve(self): # pylint: disable=too-many-return-statements, too-many-branches
         if (self.approved is not None) or (self.denied is not None) or (self.timed_out is not None):
             return True
 
@@ -90,8 +90,8 @@ class ExternalModerationRequest(models.Model):
                         self.save()
 
                         return True
-                    else:
-                        automated_votes += 1
+
+                    automated_votes += 1
                 else:
                     deny_votes += 1
 
@@ -108,8 +108,8 @@ class ExternalModerationRequest(models.Model):
                         self.save()
 
                         return True
-                    else:
-                        automated_votes += 1
+
+                    automated_votes += 1
 
         if automated_votes == 0:
             return False
