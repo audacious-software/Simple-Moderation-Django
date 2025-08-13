@@ -39,7 +39,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
-            sudo echo "deb [arch=amd64] http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy stable" > /etc/apt/sources.list.d/amazon.list
+            echo "deb [arch=amd64] http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy stable" | sudo tee -a /etc/apt/sources.list.d/amazon.list
             sudo find /etc/apt/
             sudo cat /etc/apt/sources.list.d/*
             sudo apt-get update && sudo apt-get install -y gdal-bin
