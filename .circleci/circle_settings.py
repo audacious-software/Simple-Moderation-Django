@@ -29,6 +29,8 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'prettyjson',
     'quicksilver',
+    'django_dialog_engine',
+    'django_dialog_engine_builder',
     'simple_moderation',
 )
 

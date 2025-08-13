@@ -12,4 +12,5 @@ import django
 urlpatterns = [
     url(r'^admin/', django.contrib.admin.site.urls),
     url(r'^moderation/', include('simple_moderation.urls')),
+    url(r'^builder/', include('django_dialog_engine_builder.urls')),
 ]

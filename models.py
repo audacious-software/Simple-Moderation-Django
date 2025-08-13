@@ -36,9 +36,9 @@ class ExternalModerationRequest(models.Model):
 
     used = models.DateTimeField(null=True, blank=True)
 
-    message = models.TextField(max_length=(1024 * 1024))
+    message = models.TextField(max_length=(1024 * 1024)) # pylint: disable=superfluous-parens
 
-    response = models.TextField(max_length=(1024 * 1024), null=True, blank=True)
+    response = models.TextField(max_length=(1024 * 1024), null=True, blank=True) # pylint: disable=superfluous-parens
 
     automatic_decision = models.BooleanField(default=False)
 
