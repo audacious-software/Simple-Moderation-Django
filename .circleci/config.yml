@@ -39,6 +39,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
+            sudo sed -i -e 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/us-west-2\.ec2\.archive\.ubuntu\.com\/ubuntu\//' /etc/apt/sources.list.d/ubuntu.sources
             sudo apt-get update && sudo apt-get install -y gdal-bin
             python3 -m venv /home/circleci/venv --copies
             . /home/circleci/venv/bin/activate
@@ -104,6 +105,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
+            sudo sed -i -e 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/us-west-2\.ec2\.archive\.ubuntu\.com\/ubuntu\//' /etc/apt/sources.list.d/ubuntu.sources
             sudo apt-get update && sudo apt-get install -y gdal-bin
             python3 -m venv /home/circleci/venv --copies
             . /home/circleci/venv/bin/activate
@@ -168,6 +170,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
+            sudo sed -i -e 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/us-west-2\.ec2\.archive\.ubuntu\.com\/ubuntu\//' /etc/apt/sources.list.d/ubuntu.sources
             sudo apt-get update && sudo apt-get install -y gdal-bin
             python3 -m venv /home/circleci/venv --copies
             . /home/circleci/venv/bin/activate
@@ -232,6 +235,7 @@ jobs:
       - run:
           name: Build and validate
           command: |
+            sudo sed -i -e 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/us-west-2\.ec2\.archive\.ubuntu\.com\/ubuntu\//' /etc/apt/sources.list.d/ubuntu.sources
             sudo apt-get update && sudo apt-get install -y gdal-bin
             python3 -m venv /home/circleci/venv --copies
             . /home/circleci/venv/bin/activate
