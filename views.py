@@ -37,7 +37,7 @@ def external_moderation_request(request, request_id): # pylint: disable=unused-a
 
         decision = ModerationDecision(request=moderation_request, when=timezone.now())
 
-        decision.approved = (action == 'approve')
+        decision.approved = (action == 'approve') # pylint: disable=superfluous-parens
         decision.decision_maker = 'user:%s' % request.user.username
 
         metadata = {
