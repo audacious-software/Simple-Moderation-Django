@@ -4,13 +4,15 @@ import json
 import logging
 import traceback
 
-import numpy
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils import timezone
+
+from .models import ModerationDecision
 
 def moderate(request, moderator):
     logger = logging.getLogger()
@@ -55,6 +57,33 @@ def moderate(request, moderator):
             except ImportError:
                 # pass
                 logger.error('OK: %s', traceback.format_exc())
+
+        if moderator.moderator_id.startswith('nltk-vader:'):
+            sentiment_analyzer = SentimentIntensityAnalyzer()
+
+            polarity_scores = sentiment_analyzer.polarity_scores(request.message)
+
+            logger.warning('simple_moderation.moderate.nltk-vader: %s -- %s -- %s', request, moderator, polarity_scores)
+
+            decision = ModerationDecision(request=request, when=timezone.now())
+            decision.decision_maker = moderator.moderator_id
+            decision.metadata = json.dumps(polarity_scores, indent=2)
+
+            positive_threshold = moderator.metadata.get('positive_threshold', 0.5)
+            negative_threshold = moderator.metadata.get('negative_threshold', 0.5)
+
+            if polarity_scores['neg'] > negative_threshold:
+                decision.approved = False
+                decision.save()
+
+                return
+
+            if polarity_scores['pos'] > positive_threshold:
+                decision.approved = True
+                decision.save()
+
+                return
+
     except: # pylint: disable=bare-except
         logger.error('simple_moderation.moderate ERROR: %s', traceback.format_exc())
 
