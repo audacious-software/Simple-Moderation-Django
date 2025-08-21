@@ -1,6 +1,5 @@
 # pylint: disable=line-too-long, no-member, import-outside-toplevel
 
-import json
 import logging
 import traceback
 
