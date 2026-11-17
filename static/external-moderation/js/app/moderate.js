@@ -7,7 +7,7 @@ requirejs.config({
     },
     cookie: {
       exports: 'Cookies'
-    },
+    }
   },
   baseUrl: '/static/external-approvals/js/app',
   paths: {
@@ -18,7 +18,7 @@ requirejs.config({
   }
 })
 
-requirejs(['material', 'cookie', 'jquery'], function (mdc, Cookies) {
+requirejs(['material', 'cookie', 'jquery'], function (mdc, Cookies, $) {
   const csrftoken = $('[name=csrfmiddlewaretoken]').val()
 
   function csrfSafeMethod (method) {
@@ -35,31 +35,31 @@ requirejs(['material', 'cookie', 'jquery'], function (mdc, Cookies) {
   })
 
   const responseElement = document.getElementById('response-field')
-    
+
   if (responseElement !== null) {
-	  const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'))
-	
-	  topAppBar.setScrollTarget(document.getElementById('main-content'))
-	  
-	  const responseField = mdc.textField.MDCTextField.attachTo(responseElement)
-	  
-	  $('.action-button').click(function(eventObj) {
-		const payload = {
-			action: 'deny',
-			response: responseField.value
-		}
-		
-		if (eventObj.currentTarget.id === 'action-approve') {
-			payload['action'] = 'approve'
-		}
-		
-		$.post('moderate', payload, function(data, textStatus, jqXHR) {
-			if (data.success) {
-				window.alert('Approval moderated.')
-				
-				window.location.reload()
-			}
-		})
-	  })
-	}
+    const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'))
+
+    topAppBar.setScrollTarget(document.getElementById('main-content'))
+
+    const responseField = mdc.textField.MDCTextField.attachTo(responseElement)
+
+    $('.action-button').click(function (eventObj) {
+      const payload = {
+        action: 'deny',
+        response: responseField.value
+      }
+
+      if (eventObj.currentTarget.id === 'action-approve') {
+        payload.action = 'approve'
+      }
+
+      $.post('moderate', payload, function (data, textStatus, jqXHR) {
+        if (data.success) {
+          window.alert('Approval moderated.')
+
+          window.location.reload()
+        }
+      })
+    })
+  }
 })

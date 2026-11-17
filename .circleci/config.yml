@@ -35,7 +35,8 @@ jobs:
           name: Validate Javascript code
           command: |
             npm install
-            npx eslint static/builder-js/
+            npx standard static/simple_moderation/
+            npx standard static/builder-js/
       - run:
           name: Build and validate
           command: |
@@ -100,7 +101,8 @@ jobs:
           name: Validate Javascript code
           command: |
             npm install
-            npx eslint static/builder-js/
+            npx standard static/simple_moderation/
+            npx standard static/builder-js/
       - run:
           name: Build and validate
           command: |
@@ -164,7 +166,8 @@ jobs:
           name: Validate Javascript code
           command: |
             npm install
-            npx eslint static/builder-js/
+            npx standard static/simple_moderation/
+            npx standard static/builder-js/
       - run:
           name: Build and validate
           command: |
@@ -228,7 +231,8 @@ jobs:
           name: Validate Javascript code
           command: |
             npm install
-            npx eslint static/builder-js/
+            npx standard static/simple_moderation/
+            npx standard static/builder-js/
       - run:
           name: Build and validate
           command: |

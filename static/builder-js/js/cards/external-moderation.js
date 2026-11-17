@@ -1,4 +1,6 @@
-define(['material', 'cards/node', 'jquery'], function (mdc, Node) {
+/* global define */
+
+define(['material', 'cards/node', 'jquery'], function (mdc, Node, $) {
   class ExternalModerationNode extends Node {
     editBody () {
       const destinationNodes = this.destinationNodes(this)
